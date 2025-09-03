@@ -1,0 +1,37 @@
+{
+  "name": "@zohair-abbasi/formmaster",
+  "version": "2.2.4",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "form validation",
+    "javascript",
+    "typescript",
+    "password strength",
+    "email validation",
+    "async validation",
+    "schema validation",
+    "chainable validator",
+    "auto formatting",
+    "i18n",
+    "accessibility",
+    "ai suggestions",
+    "web forms",
+    "frontend",
+    "lightweight"
+  ],
+  "author": "Zohair Abbasi",
+  "license": "MIT",
+  "description": "Modern, modular, and intelligent form validation library with multi-language support, AI-powered suggestions, gamified feedback, and accessibility-ready error handling.",
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  }
+}
