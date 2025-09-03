@@ -1,35 +1,58 @@
 {
   "name": "@zohair-abbasi/formmaster",
-  "version": "2.2.4",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "prepare": "npm run build"
+  "version": "2.2.5",
+  "description": "Ultra-lightweight, modular, and intelligent form validation library with multi-language support, AI-powered suggestions, gamified feedback, and accessibility-ready error handling.",
+  "author": {
+    "name": "Zohair Abbasi",
+    "email": "zohaira259@gmail.com",
+    "url": "https://github.com/zohair-abbasi"
   },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zohair-abbasi/formmaster.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zohair-abbasi/formmaster/issues"
+  },
+  "homepage": "https://github.com/zohair-abbasi/formmaster#readme",
   "keywords": [
+    "form",
     "form validation",
-    "javascript",
+    "validation",
+    "validator",
     "typescript",
-    "password strength",
-    "email validation",
+    "javascript",
     "async validation",
     "schema validation",
     "chainable validator",
-    "auto formatting",
+    "auto format",
+    "password strength",
     "i18n",
+    "ai",
     "accessibility",
-    "ai suggestions",
-    "web forms",
+    "gamification",
+    "lightweight",
     "frontend",
-    "lightweight"
+    "web forms"
   ],
-  "author": "Zohair Abbasi",
-  "license": "MIT",
-  "description": "Modern, modular, and intelligent form validation library with multi-language support, AI-powered suggestions, gamified feedback, and accessibility-ready error handling.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsup src/index.ts --dts --format esm,cjs",
+    "dev": "tsup src/index.ts --watch --dts --format esm,cjs",
+    "prepare": "npm run build",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=16"
+  },
   "devDependencies": {
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
