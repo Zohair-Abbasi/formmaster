@@ -34,3 +34,6 @@ export const t = (key: string, params?: Record<string, string | number>): string
     }
     return msg;
 };
+// Usage example:
+// setLanguage('es');
+// console.log(t('required')); // Output: "Este campo es obligatorio"

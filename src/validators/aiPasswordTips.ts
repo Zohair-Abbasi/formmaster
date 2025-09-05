@@ -9,7 +9,9 @@ export const aiPasswordTips = (password: string): ValidationResult => {
     if (!/[!@#$%^&*]/.test(password)) tips.push("Add a symbol (!@#$%)");
 
     return {
-        valid: tips.length <= 2,
+        valid: tips.length === 0, // <-- valid only if no tips are missing
         tips,
     };
 };
+// Note: In a real-world scenario, you might want to integrate with an AI service
+// like OpenAI to generate more sophisticated tips based on password analysis.

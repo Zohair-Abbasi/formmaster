@@ -5,7 +5,7 @@ export * from "./validators/format";
 export * from "./validators/async";
 export * from "./validators/schema";
 export * from "./validators/i18n";
-export * from "./validators/ai";
+export * from "./validators/aiPasswordTips";
 export * from "./validators/accessibility";
 export * from "./validators/gamify";
 export * from "./validators/domain";

@@ -22,11 +22,63 @@ var smartEmail = (value) => {
     "hotmial.com": "hotmail.com",
     "yaho.com": "yahoo.com"
   };
-  const domain = trimmed.split("@")[1];
-  const suggestion = domain && commonTypos[domain];
+  const parts = trimmed.split("@");
+  const suggestion = parts[1] && commonTypos[parts[1]];
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
   return {
-    valid: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed),
-    message: suggestion ? `Did you mean "${trimmed.split("@")[0]}@${suggestion}"?` : /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) ? void 0 : "Invalid email address"
+    valid: validEmail,
+    message: suggestion ? `Did you mean "${parts[0]}@${suggestion}"?` : validEmail ? void 0 : "Invalid email address"
+  };
+};
+var autoCapitalize = (value) => ({
+  valid: true,
+  message: void 0,
+  formattedValue: value.trim().split(" ").map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(" ")
+});
+var smartPhone = (value, countryCode = "+1") => {
+  const digits = value.replace(/\D/g, "");
+  const codeDigits = countryCode.replace(/\D/g, "");
+  let formatted;
+  if (value.startsWith("+")) {
+    formatted = `+${digits}`;
+  } else {
+    formatted = `${countryCode}${digits}`;
+  }
+  const valid = /^\+\d{10,15}$/.test(formatted);
+  return {
+    valid,
+    message: valid ? void 0 : `Phone number looks incomplete. Did you mean "${formatted}"?`,
+    formattedValue: formatted
+  };
+};
+var smartPassword = (value) => {
+  const trimmed = value.trim();
+  const commonWeak = ["123456", "password", "qwerty"];
+  if (commonWeak.includes(trimmed.toLowerCase())) {
+    return {
+      valid: false,
+      message: "This password is too common",
+      strength: "weak"
+    };
+  }
+  const length = trimmed.length;
+  const hasNumber = /\d/.test(trimmed);
+  const hasUpper = /[A-Z]/.test(trimmed);
+  const hasLower = /[a-z]/.test(trimmed);
+  const hasSymbol = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(trimmed);
+  const complexityCount = [hasNumber, hasUpper, hasLower, hasSymbol].filter(Boolean).length;
+  let scoreLabel = "weak";
+  if (length >= 12 && complexityCount >= 3) {
+    scoreLabel = "strong";
+  } else if (length >= 8 && complexityCount >= 2) {
+    scoreLabel = "medium";
+  } else {
+    scoreLabel = "weak";
+  }
+  return {
+    valid: scoreLabel !== "weak",
+    message: `Password strength: ${scoreLabel}`,
+    strength: scoreLabel
   };
 };
 
@@ -46,22 +98,21 @@ var validateEmail = (value) => {
 
 // src/validators/password.ts
 var passwordStrength = (value) => {
-  const lengthScore = value.length >= 8 ? 1 : 0;
   const upper = /[A-Z]/.test(value) ? 1 : 0;
   const lower = /[a-z]/.test(value) ? 1 : 0;
   const number = /[0-9]/.test(value) ? 1 : 0;
   const symbol = /[!@#$%^&*]/.test(value) ? 1 : 0;
-  const score = lengthScore + upper + lower + number + symbol;
+  const score = upper + lower + number + symbol;
   let strength = "weak";
-  if (score >= 4) strength = "strong";
-  else if (score >= 3) strength = "medium";
+  if (score === 4) strength = "strong";
+  else if (score === 2 || score === 3) strength = "medium";
   const tips = [];
   if (!upper) tips.push("Add an uppercase letter");
   if (!lower) tips.push("Add a lowercase letter");
   if (!number) tips.push("Add a number");
   if (!symbol) tips.push("Add a symbol (!@#$%)");
   return {
-    valid: score >= 3,
+    valid: value.length >= 8,
     strength,
     tips
   };
@@ -151,7 +202,7 @@ var t = (key, params) => {
   return msg;
 };
 
-// src/validators/ai.ts
+// src/validators/aiPasswordTips.ts
 var aiPasswordTips = (password) => {
   const tips = [];
   if (!/[A-Z]/.test(password)) tips.push("Add an uppercase letter");
@@ -159,7 +210,8 @@ var aiPasswordTips = (password) => {
   if (!/[0-9]/.test(password)) tips.push("Add a number");
   if (!/[!@#$%^&*]/.test(password)) tips.push("Add a symbol (!@#$%)");
   return {
-    valid: tips.length <= 2,
+    valid: tips.length === 0,
+    // <-- valid only if no tips are missing
     tips
   };
 };
@@ -171,14 +223,25 @@ var ariaError = (id, message) => {
 
 // src/validators/gamify.ts
 var passwordStrengthProgress = (value) => {
-  const score = (value.length >= 8 ? 1 : 0) + (/[A-Z]/.test(value) ? 1 : 0) + (/[a-z]/.test(value) ? 1 : 0) + (/[0-9]/.test(value) ? 1 : 0) + (/[!@#$%^&*]/.test(value) ? 1 : 0);
-  return Math.min(100, score / 5 * 100);
+  const hasLength = value.length >= 8;
+  const hasUpper = /[A-Z]/.test(value);
+  const hasLower = /[a-z]/.test(value);
+  const hasNumber = /[0-9]/.test(value);
+  const hasSymbol = /[!@#$%^&*]/.test(value);
+  const criteria = [hasLength, hasUpper, hasLower, hasNumber, hasSymbol];
+  const score = criteria.reduce((acc, v) => acc + (v ? 1 : 0), 0);
+  const progress = hasLength ? score / 5 * 100 : score / 5 * 75;
+  return Math.min(100, progress);
 };
 
 // src/validators/domain.ts
 var validateIBAN = (iban) => {
-  const pattern = /^[A-Z]{2}\d{2}[A-Z0-9]{1,30}$/;
-  return { valid: pattern.test(iban), message: pattern.test(iban) ? void 0 : "Invalid IBAN number" };
+  const trimmed = iban.replace(/\s+/g, "").toUpperCase();
+  const pattern = /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/;
+  return {
+    valid: pattern.test(trimmed),
+    message: pattern.test(trimmed) ? void 0 : "Invalid IBAN number"
+  };
 };
 var validateVAT = (vat) => {
   const pattern = /^[A-Z]{2}\d{8,12}$/;
@@ -189,6 +252,7 @@ export {
   aiPasswordTips,
   ariaError,
   asyncUsernameCheck,
+  autoCapitalize,
   capitalize,
   currentLang,
   defaultMessages,
@@ -201,6 +265,8 @@ export {
   required,
   setLanguage,
   smartEmail,
+  smartPassword,
+  smartPhone,
   t,
   trim,
   validate,

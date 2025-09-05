@@ -1,8 +1,12 @@
 import { ValidationResult } from "./types";
 
 export const validateIBAN = (iban: string): ValidationResult => {
-    const pattern = /^[A-Z]{2}\d{2}[A-Z0-9]{1,30}$/;
-    return { valid: pattern.test(iban), message: pattern.test(iban) ? undefined : "Invalid IBAN number" };
+    const trimmed = iban.replace(/\s+/g, "").toUpperCase(); // remove spaces
+    const pattern = /^[A-Z]{2}\d{2}[A-Z0-9]{11,30}$/; // enforce minimum 15 chars total
+    return {
+        valid: pattern.test(trimmed),
+        message: pattern.test(trimmed) ? undefined : "Invalid IBAN number"
+    };
 };
 
 export const validateVAT = (vat: string): ValidationResult => {

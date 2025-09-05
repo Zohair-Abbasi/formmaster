@@ -8,11 +8,20 @@ interface ValidationResult {
 }
 type AsyncValidatorFunction = (value: string) => Promise<ValidationResult>;
 
+/**
+ * Basic Validators
+ */
 declare const required: (value: string) => ValidationResult;
 declare const minLength: (length: number) => (value: string) => ValidationResult;
 declare const maxLength: (length: number) => (value: string) => ValidationResult;
 declare const regex: (pattern: RegExp, message: string) => (value: string) => ValidationResult;
+/**
+ * Smart UX Validators
+ */
 declare const smartEmail: (value: string) => ValidationResult;
+declare const autoCapitalize: (value: string) => ValidationResult;
+declare const smartPhone: (value: string, countryCode?: string) => ValidationResult;
+declare const smartPassword: (value: string) => ValidationResult;
 
 declare const validateEmail: (value: string) => ValidationResult;
 
@@ -51,4 +60,4 @@ declare const passwordStrengthProgress: (value: string) => number;
 declare const validateIBAN: (iban: string) => ValidationResult;
 declare const validateVAT: (vat: string) => ValidationResult;
 
-export { Validator, aiPasswordTips, ariaError, asyncUsernameCheck, capitalize, currentLang, defaultMessages, formatPhone, maxLength, minLength, passwordStrength, passwordStrengthProgress, regex, required, setLanguage, smartEmail, t, trim, validate, validateEmail, validateIBAN, validateVAT };
+export { Validator, aiPasswordTips, ariaError, asyncUsernameCheck, autoCapitalize, capitalize, currentLang, defaultMessages, formatPhone, maxLength, minLength, passwordStrength, passwordStrengthProgress, regex, required, setLanguage, smartEmail, smartPassword, smartPhone, t, trim, validate, validateEmail, validateIBAN, validateVAT };

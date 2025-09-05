@@ -7,7 +7,7 @@
 Ultra-lightweight, dependency-free JavaScript form validation library.  
 Smart UX-focused, AI-assisted, accessible, and gamified.
 
-**Current Version:** 2.2.5
+**Current Version:** 2.2.7
 
 ---
 

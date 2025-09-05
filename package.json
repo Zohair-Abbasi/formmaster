@@ -1,6 +1,6 @@
 {
   "name": "@zohair-abbasi/formmaster",
-  "version": "2.2.6",
+  "version": "2.2.7",
   "description": "Ultra-lightweight, modular, and intelligent form validation library with multi-language support, AI-powered suggestions, gamified feedback, and accessibility-ready error handling.",
   "author": {
     "name": "Zohair Abbasi",
@@ -42,12 +42,13 @@
     "build": "tsup src/index.ts --dts --format esm,cjs",
     "dev": "tsup src/index.ts --watch --dts --format esm,cjs",
     "prepare": "npm run build",
-    "test": "echo \"No tests yet\" && exit 0"
+    "test": "vitest run"
   },
   "files": [
     "dist",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "src"
   ],
   "sideEffects": false,
   "engines": {
@@ -56,5 +57,8 @@
   "devDependencies": {
     "tsup": "^8.5.0",
     "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "vitest": "^3.2.4"
   }
 }

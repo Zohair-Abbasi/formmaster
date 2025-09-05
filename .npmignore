@@ -1,0 +1,12 @@
+# Ignore tests
+*.test.ts
+src/tests/
+__tests__/
+
+# Ignore configs
+vitest.config.*
+coverage/
+
+# Ignore other dev stuff
+*.spec.ts
+tsconfig.*.json
